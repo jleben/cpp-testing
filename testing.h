@@ -17,6 +17,14 @@ using std::vector;
 using std::pair;
 using std::atomic;
 
+struct GlobalOptions
+{
+    GlobalOptions() {}
+    bool verbose = false;
+};
+
+GlobalOptions & options();
+
 inline double time_since(const std::chrono::steady_clock::time_point & start)
 {
     using namespace std;
@@ -30,7 +38,8 @@ inline double time_since(const std::chrono::steady_clock::time_point & start)
 inline
 bool assert(const string & message, bool value)
 {
-    printf("%s: %s\n", (value ? "OK" : "ERROR"), message.c_str());
+    if (!value || options().verbose)
+        printf("%s: %s\n", (value ? "OK" : "ERROR"), message.c_str());
 }
 
 class Test

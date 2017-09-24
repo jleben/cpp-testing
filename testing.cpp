@@ -7,6 +7,12 @@ using namespace std;
 
 namespace Testing {
 
+GlobalOptions & options()
+{
+    static GlobalOptions opt;
+    return opt;
+}
+
 bool Test_Set::run(const Options & options)
 {
     string filter_pattern;
@@ -67,6 +73,7 @@ int run(Test_Set & tests, int argc, char * argv[])
     Test_Set::Options options;
 
     Arguments::Parser args;
+    args.add_switch("-v", Testing::options().verbose);
     args.remaining_arguments(options.filter_regex);
     args.parse(argc, argv);
 
