@@ -81,11 +81,34 @@ public:
 
     Test_Set() {}
 
+    // Combine test sets.
+    // The argument is a pair a set and a name for the set.
+    // The new set contains each test from each set,
+    // with the name '<set name>.<test-name>'.
+
+    Test_Set(std::initializer_list<pair<string,Test_Set>> test_sets)
+    {
+        for(auto & entry : test_sets)
+        {
+            const Test_Set & set = entry.second;
+            for (auto & test : set.tests())
+            {
+                auto name = entry.first + '.' + test.first;
+                d_tests.emplace_back(name, test.second);
+            }
+        }
+    }
+
     Test_Set(std::initializer_list<pair<string,Func>> tests):
         d_tests(tests)
     {}
 
     bool run(const Options & options = Options());
+
+    const vector<pair<string,Func>> & tests() const
+    {
+        return d_tests;
+    }
 
 private:
     vector<pair<string,Func>> d_tests;
