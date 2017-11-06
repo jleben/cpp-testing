@@ -20,6 +20,7 @@ using std::atomic;
 struct GlobalOptions
 {
     GlobalOptions() {}
+    bool list = false;
     bool verbose = false;
 };
 

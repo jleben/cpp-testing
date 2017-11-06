@@ -74,8 +74,18 @@ int run(Test_Set & tests, int argc, char * argv[])
 
     Arguments::Parser args;
     args.add_switch("-v", Testing::options().verbose);
+    args.add_switch("-l", Testing::options().list);
     args.remaining_arguments(options.filter_regex);
     args.parse(argc, argv);
+
+    if (Testing::options().list)
+    {
+        for (auto & test : tests.tests())
+        {
+            cerr << test.first << endl;
+        }
+        return 0;
+    }
 
     return tests.run(options) ? 0 : 1;
 }
