@@ -41,6 +41,7 @@ bool assert(const string & message, bool value)
 {
     if (!value || options().verbose)
         printf("%s: %s\n", (value ? "OK" : "ERROR"), message.c_str());
+    return value;
 }
 
 class Test
