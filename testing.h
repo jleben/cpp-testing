@@ -60,9 +60,10 @@ public:
         Testing::assert(message, value);
 
         if (!value)
+        {
             d_success = false;
-
-        throw std::runtime_error("Critical assertion failed: " + message);
+            throw std::runtime_error("Critical assertion failed: " + message);
+        }
     }
 
     bool success() const { return d_success; }
