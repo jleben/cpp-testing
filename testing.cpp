@@ -19,6 +19,9 @@ GlobalOptions & options()
 
 bool Test_Set::run(Func f)
 {
+    if (!options().isolate)
+        return f();
+
     pid_t pid = fork();
 
     if (pid == 0)
@@ -105,6 +108,7 @@ int run(Test_Set & tests, int argc, char * argv[])
     Arguments::Parser args;
     args.add_switch("-v", Testing::options().verbose);
     args.add_switch("-l", Testing::options().list);
+    args.add_switch("--no-isolate", Testing::options().isolate, false);
     args.remaining_arguments(options.filter_regex);
     args.parse(argc, argv);
 

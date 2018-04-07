@@ -22,6 +22,7 @@ struct GlobalOptions
     GlobalOptions() {}
     bool list = false;
     bool verbose = false;
+    bool isolate = true;
 };
 
 GlobalOptions & options();
