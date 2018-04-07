@@ -114,6 +114,8 @@ public:
     }
 
 private:
+    bool run(Func f);
+
     vector<pair<string,Func>> d_tests;
 };
 

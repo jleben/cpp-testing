@@ -3,6 +3,10 @@
 
 #include <regex>
 
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
+
 using namespace std;
 
 namespace Testing {
@@ -11,6 +15,32 @@ GlobalOptions & options()
 {
     static GlobalOptions opt;
     return opt;
+}
+
+bool Test_Set::run(Func f)
+{
+    pid_t pid = fork();
+
+    if (pid == 0)
+    {
+        bool ok = f();
+        exit(ok ? 0 : 1);
+    }
+    else
+    {
+        int status;
+        if (waitpid(pid, &status, 0) <= 0)
+        {
+            cerr << "ERROR: Failed to wait for the child process." << endl;
+            return false;
+        }
+
+        if (!WIFEXITED(status))
+            return false;
+
+        int exit_status = WEXITSTATUS(status);
+        return exit_status == 0;
+    }
 }
 
 bool Test_Set::run(const Options & options)
@@ -44,7 +74,7 @@ bool Test_Set::run(const Options & options)
         ++total_test_count;
 
         cerr << endl << "-- " << test.first << endl;
-        bool ok = test.second();
+        bool ok = run(test.second);
         cerr << "-- " << (ok ? "PASSED" : "FAILED") << endl;
 
         if (!ok)
