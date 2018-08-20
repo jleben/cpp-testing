@@ -1,6 +1,8 @@
 #pragma once
 
 #include <string>
+#include <sstream>
+#include <iostream>
 #include <chrono>
 #include <iostream>
 #include <functional>
@@ -45,9 +47,30 @@ bool assert(const string & message, bool value)
     return value;
 }
 
+class Test;
+
+class Assertion : public std::ostringstream
+{
+    Test & d_test;
+    bool d_value = false;
+public:
+    Assertion(const Assertion & other) = delete;
+    Assertion(Assertion && other):
+        d_test(other.d_test),
+        d_value(other.d_value)
+    {}
+    Assertion(Test & test, bool value): d_test(test), d_value(value) {}
+    ~Assertion();
+};
+
 class Test
 {
 public:
+    Assertion assert(bool value)
+    {
+        return Assertion(*this, value);
+    }
+
     void assert(const string & message, bool value)
     {
         Testing::assert(message, value);
@@ -72,6 +95,11 @@ public:
 private:
     atomic<bool> d_success { true };
 };
+
+inline Assertion::~Assertion()
+{
+    d_test.assert(str(), d_value);
+}
 
 class Test_Set
 {
