@@ -47,6 +47,13 @@ bool assert(const string & message, bool value)
     return value;
 }
 
+inline
+void assert_critical(const string & message, bool value)
+{
+    if (!assert(message, value))
+        throw std::runtime_error("Critical assertion failed: " + message);
+}
+
 class Test;
 
 class Assertion : public std::ostringstream
@@ -81,13 +88,10 @@ public:
 
     void assert_critical(const string & message, bool value)
     {
-        Testing::assert(message, value);
-
         if (!value)
-        {
             d_success = false;
-            throw std::runtime_error("Critical assertion failed: " + message);
-        }
+
+        Testing::assert_critical(message, value);
     }
 
     bool success() const { return d_success; }
