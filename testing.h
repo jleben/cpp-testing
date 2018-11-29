@@ -139,6 +139,11 @@ public:
         d_tests(tests)
     {}
 
+    void add_test(const string & name, Func f)
+    {
+        d_tests.emplace_back(name, f);
+    }
+
     bool run(const Options & options = Options());
 
     const vector<pair<string,Func>> & tests() const
