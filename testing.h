@@ -70,6 +70,16 @@ public:
     ~Assertion();
 };
 
+class Information : public std::ostringstream
+{
+public:
+    ~Information()
+    {
+        if (options().verbose)
+            printf("%s", str().c_str());
+    }
+};
+
 class Test
 {
 public:
