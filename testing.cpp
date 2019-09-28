@@ -98,7 +98,7 @@ bool Test_Set::run(const Options & options)
         cerr << "(" << failed_tests.size() << " / " << total_test_count << ")" << endl;
     }
 
-    return (failed_tests.empty() ? 0 : 1);
+    return failed_tests.empty();
 }
 
 int run(Test_Set & tests, int argc, char * argv[])
